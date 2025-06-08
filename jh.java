@@ -1,0 +1,1 @@
+alert('Redirecting to Google Drive for Class 9 ICSE. If you see an access error, ensure you are logged in with the correct Google account or contact the admin.');

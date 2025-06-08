@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PW Vidyapeeth Test Questions - Murli Web Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #004aad;
+            color: white;
+            position: relative;
+        }
+
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        header p {
+            font-style: italic;
+        }
+
+        #admin-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #fff;
+            color: #004aad;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #admin-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .admin-container, .user-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .admin-container h2, .user-container h2 {
+            color: #004aad;
+            margin-bottom: 20px;
+        }
+
+        #upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #upload-form label {
+            font-weight: bold;
+        }
+
+        #upload-form select, #upload-form input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #submit-btn {
+            padding: 10px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submit-btn:hover {
+            background-color: #003580;
+        }
+
+        .select-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .select-container select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+
+        #view-btn {
+            padding: 10px 20px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #view-btn:hover {
+            background-color: #003580;
+        }
+
+        .book-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        #book {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+        }
+
+        .page.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .page canvas {
+            max-width: 100%;
+            max-height: 100%;
+            border: 1px solid #ccc;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #page-info {
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #004aad;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #004aad;
+            color: white;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            .admin-container, .user-container, .book-container {
+                margin: 10px;
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            .logo img {
+                width: 80px;
+            }
+
+            #book {
+                height: 400px;
+            }
+
+            .select-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://i.supaimg.com/dd053cc2-3d07-4c93-bbe9-ccd4565ea1cf.webp" alt="Murli Web Developer Logo">
+            <h1>PW Vidyapeeth Test Questions</h1>
+        </div>
+        <p>Designed by Murli Web Developer</p>
+        <button id="admin-btn">Admin Login</button>
+    </header>
+    <main>
+        <!-- Admin Upload Section -->
+        <div class="admin-container" id="admin-container" style="display: none;">
+            <h2>Admin: Upload Test Questions</h2>
+            <form id="upload-form">
+                <label for="class-select">Class:</label>
+                <select id="class-select" required>
+                    <option value="" disabled selected>Select Class</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                </select>
+                <label for="board-select">Board:</label>
+                <select id="board-select" required>
+                    <option value="" disabled selected>Select Board</option>
+                    <option value="CBSE">CBSE</option>
+                    <option value="ICSE">ICSE</option>
+                </select>
+                <label for="pdf-file">Upload PDF:</label>
+                <input type="file" id="pdf-file" accept="application/pdf" required>
+                <button type="submit" id="submit-btn">Upload</button>
+            </form>
+        </div>
+        <!-- User View Section -->
+        <div class="user-container">
+            <h2>Select Class and Board</h2>
+            <div class="select-container">
+                <select id="user-class-select">
+                    <option value="" disabled selected>Select Class</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                </select>
+                <select id="user-board-select">
+                    <option value="" disabled selected>Select Board</option>
+                    <option value="CBSE">CBSE</option>
+                    <option value="ICSE">ICSE</option>
+                </select>
+                <button id="view-btn">View Questions</button>
+            </div>
+        </div>
+        <!-- Book Viewer -->
+        <div class="book-container" id="book-container" style="display: none;">
+            <div id="book">
+                <!-- Canvas elements for PDF pages -->
+            </div>
+            <div class="controls">
+                <button id="prev-btn" disabled>Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button id="next-btn" disabled>Next</button>
+            </div>
+        </div>
+        <div class="loading" id="loading" style="display: none;">Loading PDF...</div>
+    </main>
+    <footer>
+        <p>© 2025 PW Vidyapeeth. Designed by Murli Web Developer.</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminBtn = document.getElementById('admin-btn');
+            const adminContainer = document.getElementById('admin-container');
+            const uploadForm = document.getElementById('upload-form');
+            const classSelect = document.getElementById('class-select');
+            const boardSelect = document.getElementById('board-select');
+            const pdfFile = document.getElementById('pdf-file');
+            const userClassSelect = document.getElementById('user-class-select');
+            const userBoardSelect = document.getElementById('user-board-select');
+            const viewBtn = document.getElementById('view-btn');
+            const book = document.getElementById('book');
+            const bookContainer = document.getElementById('book-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const pageInfo = document.getElementById('page-info');
+            const loading = document.getElementById('loading');
+            let pages = [];
+            let currentPage = 0;
+            let pdfStore = {};
+
+            // Configure pdf.js worker
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+            // Admin Login
+            adminBtn.addEventListener('click', () => {
+                const password = prompt('Enter Admin Password:');
+                if (password === 'admin123') {
+                    adminContainer.style.display = 'block';
+                    adminBtn.style.display = 'none';
+                } else {
+                    alert('Incorrect password.');
+                }
+            });
+
+            // Admin Upload
+            uploadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!classSelect.value || !boardSelect.value || !pdfFile.files[0]) {
+                    alert('All fields are required.');
+                    return;
+                }
+
+                const file = pdfFile.files[0];
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a valid PDF file.');
+                    return;
+                }
+
+                loading.style.display = 'block';
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const arrayBuffer = e.target.result;
+                    const key = `${classSelect.value}-${boardSelect.value}`;
+                    pdfStore[key] = arrayBuffer;
+                    alert('PDF uploaded successfully!');
+                    loading.style.display = 'none';
+                    uploadForm.reset();
+                    adminContainer.style.display = 'none';
+                    adminBtn.style.display = 'block';
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            // User View PDF
+            viewBtn.addEventListener('click', () => {
+                if (!userClassSelect.value || !userBoardSelect.value) {
+                    alert('Please select both class and board.');
+                    return;
+                }
+
+                if (userClassSelect.value === '9' && userBoardSelect.value === 'ICSE') {
+                    const key = '9-ICSE,CBSE';
+                    if (pdfStore[key]) {
+                        loading.style.display = 'block';
+                        loadPDF(pdfStore[key]);
+                    } else {
+                        alert('Redirecting to Google Drive for Class 9 ICSE. If you see an access error, ensure you are logged in with the correct Google account or contact the admin.');
+                        window.location.href = 'https://drive.google.com/drive/folders/1KT8wLtRSNpRjLMX8IMI7BybWjKG2yAC9';
+                    }
+                    return;
+                }
+
+                const key = `${userClassSelect.value}-${userBoardSelect.value}`;
+                const arrayBuffer = pdfStore[key];
+                if (!arrayBuffer) {
+                    alert('No PDF available for this class and board.');
+                    return;
+                }
+
+                loading.style.display = 'block';
+                loadPDF(arrayBuffer);
+            });
+
+            async function loadPDF(arrayBuffer) {
+                try {
+                    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    book.innerHTML = '';
+                    pages = [];
+
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const viewport = page.getViewport({ scale: 1.5 });
+
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        const pageDiv = document.createElement('div');
+                        pageDiv.classList.add('page');
+                        if (i === 1) pageDiv.classList.add('active');
+                        pageDiv.appendChild(canvas);
+                        book.appendChild(pageDiv);
+                        pages.push(pageDiv);
+
+                        await page.render({
+                            canvasContext: context,
+                            viewport: viewport
+                        }).promise;
+
+                        // Add watermark
+                        context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                        context.font = '30px Arial';
+                        context.fillText('PW Vidyapeeth - Do Not Copy', 50, 50);
+                    }
+
+                    bookContainer.style.display = 'block';
+                    loading.style.display = 'none';
+                    currentPage = 0;
+                    updateControls();
+                } catch (error) {
+                    console.error('Error loading PDF:', error);
+                    loading.style.display = 'none';
+                    alert('Failed to load PDF. Please try again.');
+                }
+            }
+
+            function updateControls() {
+                pageInfo.textContent = `Page ${currentPage + 1} of ${pages.length}`;
+                prevBtn.disabled = currentPage === 0;
+                nextBtn.disabled = currentPage === pages.length - 1;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < pages.length - 1) {
+                    pages[currentPage].classList.remove('active');
+                    currentPage++;
+                    pages[currentPage].classList.add('active');
+                    updateControls();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 0) {
+                    pages[currentPage].classList.remove('active');
+                    currentPage--;
+                    pages[currentPage].classList.add('active');
+                    updateControls();
+                }
+            });
+
+            // Prevent right-click
+            book.addEventListener('contextmenu', e => e.preventDefault());
+        });
+    </script>
+</body>
+</html>
